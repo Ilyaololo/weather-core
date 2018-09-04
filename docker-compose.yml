@@ -1,0 +1,92 @@
+version: "3.6"
+
+services:
+  weather-amqp:
+    container_name: weather-amqp
+    image: rabbitmq:3.7-alpine
+
+  weather-db:
+    container_name: weather-db
+    image: postgres:11-alpine
+    ports:
+      - ${TYPEORM_PORT}:5432
+    environment:
+      POSTGRES_DB: ${TYPEORM_DATABASE}
+      POSTGRES_USER: ${TYPEORM_USERNAME}
+      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  weather-elastic:
+    container_name: weather-elastic
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.0
+    environment:
+      - "bootstrap.memory_lock=true"
+      - "cluster.name=docker-cluster"
+      # - "path.repo=/usr/share/elasticsearch/repo" # todo
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - ${ELASTIC_PORT}:9200
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+      # - esrepo:/usr/share/elasticsearch/repo # todo
+    networks:
+      - esnet
+
+  weather-nginx:
+    container_name: weather-nginx
+    build:
+      context: ./docker/nginx
+      dockerfile: ./Dockerfile
+    environment:
+      APP_PORT:
+      NGINX_PORT:
+    image: weather-nginx
+    ports:
+      - ${NGINX_PORT}:80
+    depends_on:
+      - weather-backend
+    links:
+      - weather-backend
+
+  weather-redis:
+    container_name: weather-redis
+    image: redis:4-alpine
+    ports:
+      - ${REDIS_PORT}:6379
+
+  weather-backend:
+    container_name: weather-backend
+    build:
+      context: ./docker/backend
+      dockerfile: ./Dockerfile
+    image: weather-backend
+    ports:
+      - ${NGINX_PORT}:3000
+    depends_on:
+      - weather-db
+      - weather-redis
+      - weather-elastic
+      - weather-amqp
+    links:
+      - weather-db
+      - weather-redis
+      - weather-elastic
+      - weather-amqp
+
+networks:
+  esnet:
+
+volumes:
+  esdata:
+    driver: local
+
+  # esrepo:
+  #   driver: local
+
+  pgdata:
+    driver: local

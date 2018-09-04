@@ -1,0 +1,15 @@
+type City {
+  id: String
+  name: String
+  coord: Coord
+}
+
+type Coord {
+  lat: Float
+  lon: Float
+}
+
+type Query {
+  city(id: String): City
+  cities: [City]
+}

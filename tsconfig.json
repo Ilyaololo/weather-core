@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "noLib": false,
+    "outDir": "./dist",
+    "removeComments": true,
+    "sourceMap": true,
+    "target": "esnext"
+  },
+  "include": [
+    "typings/globals.d.ts",
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}

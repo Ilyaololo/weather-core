@@ -1,0 +1,5 @@
+{
+  "name": "api",
+  "script": "dist/main.js",
+  "env": {}
+}

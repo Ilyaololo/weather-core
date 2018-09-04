@@ -1,0 +1,46 @@
+type Query {
+  weather(id: String): Weather
+}
+
+type Location {
+  country: String
+  name: String
+  region: String
+  lat: Float
+  lon: Float
+  timezone: Int
+  localtime: String
+}
+
+type Condition {
+  code: Int
+  icon: String
+  text: String
+}
+
+type Current {
+  cloud: Int
+  condition: Condition
+  feelslikeC: Float
+  feelslikeF: Float
+  humidity: Int
+  isDay: Int
+  lastUpdated: Int
+  precipIn: Float
+  precipMm: Float
+  pressureIn: Float
+  pressureMb: Float
+  tempC: Float
+  tempF: Float
+  visKm: Float
+  visMiles: Float
+  windDegree: Float
+  windDir: String
+  windKph: Float
+  windMph: Float
+}
+
+type Weather {
+  current: Current
+  location: Location
+}
