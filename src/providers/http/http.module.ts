@@ -10,8 +10,8 @@ export class HttpModule {
 
     return {
       module: HttpModule,
-      imports: [providers],
-      exports: [providers],
+      imports: [ providers ],
+      exports: [ providers ],
     };
   }
 }

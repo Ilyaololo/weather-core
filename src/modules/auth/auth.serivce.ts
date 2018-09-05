@@ -10,12 +10,12 @@ import { JwtToken, JwtPayload } from './interfaces/auth.interfaces';
 
 @Injectable()
 export class AuthService {
-
   constructor(
     private readonly joiService: JoiService,
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
-  ) {}
+  ) {
+  }
 
   public async createToken(args: JwtPayload): Promise<JwtToken> {
     await this.joiService.validate(args, Joi.object({

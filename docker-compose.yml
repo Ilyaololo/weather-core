@@ -4,6 +4,11 @@ services:
   weather-amqp:
     container_name: weather-amqp
     image: rabbitmq:3.7-alpine
+    ports:
+      - ${RABBITMQ_PORT}:5672
+    environment:
+      RABBITMQ_DEFAULT_USER:
+      RABBITMQ_DEFAULT_PASS:
 
   weather-db:
     container_name: weather-db

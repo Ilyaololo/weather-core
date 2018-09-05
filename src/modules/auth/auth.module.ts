@@ -14,7 +14,8 @@ import { JwtStrategy } from './jwt.strategy';
     UserModule,
     JwtModule.register(JWT),
   ],
-  providers: [AuthService, AuthResolvers, JwtStrategy],
-  exports: [AuthService],
+  providers: [ AuthService, AuthResolvers, JwtStrategy ],
+  exports: [ AuthService ],
 })
-export class AuthModule {}
+export class AuthModule {
+}

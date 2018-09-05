@@ -1,4 +1,4 @@
-import { Global, Module, DynamicModule } from '@nestjs/common';
+import { DynamicModule, Global, Module } from '@nestjs/common';
 
 import * as Joi from 'joi';
 import { ValidationOptions } from 'joi';
@@ -13,7 +13,8 @@ export class JoiModule {
     return {
       module: JoiModule,
       providers: [
-        JoiService, {
+        JoiService,
+        {
           provide: JOI,
           useFactory: () => Joi,
         },

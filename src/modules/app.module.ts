@@ -1,13 +1,12 @@
-import { GraphQLFactory, GraphQLModule } from '@nestjs/graphql';
-import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+import { Module, MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import * as stringify from 'json-stringify-safe';
 
-import { ApolloServer } from 'apollo-server-express';
-
-import { ELASTIC } from 'configs';
-import { ElasticModule, HttpModule, JoiModule } from 'providers';
+import { AMQP, ELASTIC, SMS, SMTP } from 'configs';
+import { AmqpModule, ElasticModule, HttpModule, JoiModule, SmsModule, SmtpModule } from 'providers';
+import { ToobusyMiddleware } from 'middleware';
 
 import { AuthModule } from './auth';
 import { CityModule } from './city';
@@ -19,37 +18,7 @@ import { WeatherModule } from './weather';
     /**
      * System module
      */
-    GraphQLModule,
-    HttpModule.forRoot({
-      timeout: 1000 * 5,
-      maxRedirects: 5,
-    }),
-    TypeOrmModule.forRoot(),
-
-    /**
-     * Common modules
-     */
-    ElasticModule.forRoot(ELASTIC),
-    JoiModule.forRoot({
-      abortEarly: false,
-      allowUnknown: true,
-    }),
-
-    /**
-     * Application modules
-     */
-    AuthModule,
-    CityModule,
-    UserModule,
-    WeatherModule,
-  ],
-})
-export class AppModule {
-  constructor(private readonly graphQLFactory: GraphQLFactory) {
-  }
-
-  public configureGraphQL(app: any) {
-    const server = new ApolloServer({
+    GraphQLModule.forRoot({
       rootValue: {},
       context: ({ req, res }) => ({ req, res }),
       debug: false,
@@ -66,14 +35,42 @@ export class AppModule {
       },
       tracing: false,
       // cache: {}, // todo
-      schema: this.graphQLFactory.createSchema({
-        typeDefs: this.graphQLFactory.mergeTypesByPaths('src/**/typedefs/*.graphql'),
-      }),
-    });
+      typePaths: [ 'src/**/typedefs/*.graphql' ],
+    }),
+    HttpModule.forRoot({
+      timeout: 1000 * 5,
+      maxRedirects: 5,
+    }),
+    TypeOrmModule.forRoot(),
 
-    server.applyMiddleware({
-      app,
-      path: '/graphql',
-    });
+    /**
+     * Common modules
+     */
+    AmqpModule.forRoot(AMQP),
+    ElasticModule.forRoot(ELASTIC),
+    JoiModule.forRoot({
+      abortEarly: false,
+      allowUnknown: true,
+    }),
+    SmsModule.forRoot(SMS),
+    SmtpModule.forRoot(SMTP),
+
+    /**
+     * Application modules
+     */
+    AuthModule,
+    CityModule,
+    UserModule,
+    WeatherModule,
+  ],
+})
+export class AppModule implements NestModule {
+  public configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ToobusyMiddleware)
+      .forRoutes({
+        path: '*',
+        method: RequestMethod.ALL,
+      });
   }
 }

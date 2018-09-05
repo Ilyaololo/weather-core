@@ -15,10 +15,6 @@ async function bootstrap() {
     //   options: REDIS,
     // });
 
-    // configurate GraphQL Server
-    const appModule = app.get(AppModule);
-    appModule.configureGraphQL(app);
-
     app.enableCors(APP.CORS);
 
     // await app.startAllMicroservicesAsync();

@@ -9,8 +9,8 @@ export class ElasticModule {
 
     return {
       module: ElasticModule,
-      imports: [providers],
-      exports: [providers],
+      imports: [ providers ],
+      exports: [ providers ],
     };
   }
 }

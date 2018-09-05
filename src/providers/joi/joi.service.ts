@@ -1,20 +1,21 @@
 import { Inject, BadRequestException } from '@nestjs/common';
 
-import { SchemaLike, ValidationOptions, ValidationResult } from 'joi';
+import * as Joi from 'joi';
 
 import { JOI, JOI_OPTIONS } from './constants';
 
 export class JoiService {
   constructor(
-    @Inject(JOI)
-    private readonly joi: any,
-
-    @Inject(JOI_OPTIONS)
-    private readonly options: ValidationOptions,
+    @Inject(JOI) private readonly joi: typeof Joi,
+    @Inject(JOI_OPTIONS) private readonly options: Joi.ValidationOptions,
   ) {
   }
 
-  public async validate(value: any, schema: SchemaLike, options: ValidationOptions = {}): Promise<ValidationResult<any>> {
+  public async validate(
+    value: any,
+    schema: Joi.SchemaLike,
+    options: Joi.ValidationOptions = {},
+  ): Promise<Joi.ValidationResult<any>> {
     try {
       return await this.joi.validate(value, schema, {
         ...this.options,

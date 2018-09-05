@@ -11,10 +11,8 @@ import { selCities } from './selectors/city.selectors';
 
 @Injectable()
 export class CityService {
-
   constructor(
-    @InjectRepository(CityEntity)
-    private readonly cityRepository: Repository<CityEntity>,
+    @InjectRepository(CityEntity) private readonly cityRepository: Repository<CityEntity>,
     private readonly joiService: JoiService,
   ) {
   }
@@ -39,7 +37,7 @@ export class CityService {
         lat: city.lat,
         lon: city.lon,
       },
-    };
+    } as City;
   }
 
   public async getAll(): Promise<City[]> {

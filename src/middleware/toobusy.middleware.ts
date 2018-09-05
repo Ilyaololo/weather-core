@@ -1,10 +1,16 @@
-import { Injectable, NestMiddleware, MiddlewareFunction } from '@nestjs/common';
+import { Injectable, MiddlewareFunction, NestMiddleware } from '@nestjs/common';
+
+import * as toobusy from 'toobusy-js';
 
 @Injectable()
 export class ToobusyMiddleware implements NestMiddleware {
   public resolve(...args: any[]): MiddlewareFunction {
     return (req, res, next) => {
-      console.log('Request...');
+      if (toobusy()) {
+        // throw new ServiceUnavailableException();
+      } else {
+
+      }
 
       next();
     };

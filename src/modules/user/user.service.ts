@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -16,8 +16,7 @@ import { User, UserPayload } from './interfaces/user.interfaces';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
     private readonly joiService: JoiService,
   ) {
   }
@@ -28,7 +27,7 @@ export class UserService {
     return selUsers(users);
   }
 
-  public async findById(args: { id: string }): Promise<any> {
+  public async findById(args: { id: string }): Promise<UserEntity> {
     await this.joiService.validate(args, Joi.object({
       id: Joi.number().required(),
     }));
@@ -38,7 +37,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundException();
+      throw new BadRequestException();
     }
 
     return user;
@@ -54,28 +53,26 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundException();
+      throw new BadRequestException();
     }
 
     return user;
   }
 
-  public async findByLoginAndPassword(args: UserPayload): Promise<any> {
+  public async findByLoginAndPassword(args: UserPayload): Promise<UserEntity> {
     await this.joiService.validate(args, Joi.object({
       login: Joi.string().max(128).required(),
       password: Joi.string().max(128).required(),
     }));
 
-    const foundUser = await this.findByLogin(args);
-    const passwordHash = createHash(args.password, foundUser.salt);
-
+    const entity = await this.findByLogin(args);
     const user = await this.userRepository.findOne({
       login: args.login,
-      passwordHash,
+      passwordHash: createHash(args.password, entity.salt),
     });
 
     if (!user) {
-      throw new NotFoundException();
+      throw new BadRequestException();
     }
 
     return user;

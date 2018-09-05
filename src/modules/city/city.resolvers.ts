@@ -1,5 +1,4 @@
-import { InternalServerErrorException } from '@nestjs/common';
-import { Query, Resolver } from '@nestjs/graphql';
+import { Query, Mutation, Resolver } from '@nestjs/graphql';
 
 import { City } from './interfaces/city.interface';
 import { CityService } from './city.service';
@@ -10,23 +9,11 @@ export class CityResolvers {
 
   @Query('cities')
   public async getCityList(): Promise<City[]> {
-    try {
-      return await this.cityService.getAll();
-    } catch (err) {
-      throw new InternalServerErrorException();
-    }
+    return await this.cityService.getAll();
   }
 
   @Query('city')
   public async getCity(obj, args, ctx, info): Promise<City> {
-    try {
-      return await this.cityService.get(args);
-    } catch (err) {
-      if (!err.status) {
-        throw new InternalServerErrorException();
-      }
-
-      throw err;
-    }
+    return await this.cityService.get(args);
   }
 }
