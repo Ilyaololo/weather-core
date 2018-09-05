@@ -17,6 +17,22 @@ export class CityEntity {
   public name: string;
 
   @Column({
+    type: 'text',
+    nullable: true,
+  })
+  public region: string;
+
+  @Column({
+    type: 'text',
+  })
+  public country: string;
+
+  @Column({
+    type: 'text',
+  })
+  public timezone: string;
+
+  @Column({
     type: 'float',
   })
   public lat: number;

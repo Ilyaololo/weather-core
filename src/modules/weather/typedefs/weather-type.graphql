@@ -2,45 +2,49 @@ type Query {
   weather(id: String): Weather
 }
 
-type Location {
-  country: String
-  name: String
-  region: String
-  lat: Float
-  lon: Float
-  timezone: Int
-  localtime: String
-}
-
 type Condition {
   code: Int
   icon: String
   text: String
 }
 
-type Current {
-  cloud: Int
-  condition: Condition
-  feelslikeC: Float
-  feelslikeF: Float
-  humidity: Int
-  isDay: Int
-  lastUpdated: Int
-  precipIn: Float
-  precipMm: Float
-  pressureIn: Float
-  pressureMb: Float
-  tempC: Float
-  tempF: Float
-  visKm: Float
-  visMiles: Float
-  windDegree: Float
-  windDir: String
-  windKph: Float
-  windMph: Float
+enum PrecipUnit {
+  In
+  Mm
+}
+
+enum PressureUnit {
+  In
+  Mb
+}
+
+enum TempUnit {
+  C
+  F
+}
+
+enum VisUnit {
+  Km
+  Miles
+}
+
+enum WindUnit {
+  Kph
+  Mph
 }
 
 type Weather {
-  current: Current
-  location: Location
+  cloud: Int
+  condition: Condition
+  feelslike(unit: TempUnit = C): Float
+  humidity: Int
+  isDay: Int
+  lastUpdated: Int
+  precip(unit: PrecipUnit = Mm): Float
+  pressure(unit: PressureUnit = Mb): Float
+  temp(unit: TempUnit = C): Float
+  vis(unit: VisUnit = Km): Float
+  windDegree: Float
+  windDir: String
+  wind(unit: WindUnit = Kph): Float
 }

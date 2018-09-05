@@ -1,4 +1,4 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 
 import { UserService } from 'modules/user';
 
@@ -14,8 +14,14 @@ export class AuthResolvers {
   }
 
   @Query('login')
-  public async login(obj, args, ctx, info): Promise<JwtToken> {
-    await this.userService.findByLoginAndPassword(args);
-    return await this.authService.createToken(args);
+  public async login(@Args('login') login: string, @Args('password') password: string): Promise<JwtToken> {
+    await this.userService.findOneByLoginAndPassword({
+      login,
+      password,
+    });
+
+    return await this.authService.createToken({
+      login,
+    });
   }
 }

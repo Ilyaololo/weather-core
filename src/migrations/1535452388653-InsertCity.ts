@@ -5,18 +5,18 @@ export class InsertCity1535452388653 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
       await queryRunner.query(`
-        INSERT INTO public.city (name, code_id, lat, lon)
-        VALUES ('Barnaul', '${uuid()}', 53.36, 83.75)
+        INSERT INTO public.city (code_id, name, region, country, timezone, lat, lon)
+        VALUES ('${uuid()}', 'Barnaul', 'Altaisky krai', 'Russia', 'Asia/Barnaul', 53.36, 83.75)
       `);
 
       await queryRunner.query(`
-        INSERT INTO public.city (name, code_id, lat, lon)
-        VALUES ('Novosibirsk', '${uuid()}', 55.04, 82.93)
+        INSERT INTO public.city (code_id, name, region, country, timezone, lat, lon)
+        VALUES ('${uuid()}', 'Novosibirsk', 'Novosibirsk', 'Russia', 'Asia/Novosibirsk', 55.04, 82.93)
       `);
 
       await queryRunner.query(`
-        INSERT INTO public.city (name, code_id, lat, lon)
-        VALUES ('Moscow', '${uuid()}', 55.75, 37.62)
+        INSERT INTO public.city (code_id, name, region, country, timezone, lat, lon)
+        VALUES ('${uuid()}', 'Moscow', 'Moscow City', 'Russia', 'Europe/Moscow', 55.75, 37.62)
       `);
     }
 

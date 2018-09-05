@@ -21,19 +21,17 @@ export class UserService {
   ) {
   }
 
-  public async findAll(): Promise<User[]> {
+  public async findAll(q: string): Promise<User[]> {
     const users = await this.userRepository.find();
 
     return selUsers(users);
   }
 
-  public async findById(args: { id: string }): Promise<UserEntity> {
-    await this.joiService.validate(args, Joi.object({
-      id: Joi.number().required(),
-    }));
+  public async findOneById(id: string): Promise<UserEntity> {
+    await this.joiService.validate(id, Joi.number().required());
 
     const user = await this.userRepository.findOne({
-      codeId: args.id,
+      codeId: id,
     });
 
     if (!user) {
@@ -43,7 +41,7 @@ export class UserService {
     return user;
   }
 
-  public async findByLogin(payload: JwtPayload): Promise<UserEntity> {
+  public async findOneByLogin(payload: JwtPayload): Promise<UserEntity> {
     await this.joiService.validate(payload, Joi.object({
       login: Joi.string().max(128).required(),
     }));
@@ -59,13 +57,13 @@ export class UserService {
     return user;
   }
 
-  public async findByLoginAndPassword(args: UserPayload): Promise<UserEntity> {
+  public async findOneByLoginAndPassword(args: UserPayload): Promise<UserEntity> {
     await this.joiService.validate(args, Joi.object({
       login: Joi.string().max(128).required(),
       password: Joi.string().max(128).required(),
     }));
 
-    const entity = await this.findByLogin(args);
+    const entity = await this.findOneByLogin(args);
     const user = await this.userRepository.findOne({
       login: args.login,
       passwordHash: createHash(args.password, entity.salt),

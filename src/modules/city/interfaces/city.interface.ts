@@ -6,5 +6,8 @@ export interface Coord {
 export interface City {
   id: string;
   name: string;
+  region: string;
+  country: string;
+  timezone: string;
   coord: Coord;
 }

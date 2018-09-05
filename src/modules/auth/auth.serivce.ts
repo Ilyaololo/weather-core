@@ -28,6 +28,10 @@ export class AuthService {
   }
 
   public async validateUser(payload: JwtPayload): Promise<UserEntity> {
-    return await this.userService.findByLogin(payload);
+    await this.joiService.validate(payload, Joi.object({
+      login: Joi.string().max(128).required(),
+    }));
+
+    return await this.userService.findOneByLogin(payload);
   }
 }

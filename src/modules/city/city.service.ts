@@ -17,13 +17,17 @@ export class CityService {
   ) {
   }
 
-  public async get(args: { id: string }): Promise<City> {
-    await this.joiService.validate(args, Joi.object({
-      id: Joi.string().required(),
-    }));
+  public async findAll(q: string): Promise<City[]> {
+    const cities = await this.cityRepository.find();
+
+    return selCities(cities);
+  }
+
+  public async findOneById(id: string): Promise<City> {
+    await this.joiService.validate(id, Joi.string().required());
 
     const city = await this.cityRepository.findOne({
-      codeId: args.id,
+      codeId: id,
     });
 
     if (!city) {
@@ -33,16 +37,13 @@ export class CityService {
     return {
       id: city.codeId,
       name: city.name,
+      region: city.region,
+      country: city.country,
+      timezone: city.timezone,
       coord: {
         lat: city.lat,
         lon: city.lon,
       },
     } as City;
-  }
-
-  public async getAll(): Promise<City[]> {
-    const cities = await this.cityRepository.find();
-
-    return selCities(cities);
   }
 }
