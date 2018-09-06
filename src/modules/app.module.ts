@@ -19,9 +19,14 @@ import { WeatherModule } from './weather';
      * System module
      */
     GraphQLModule.forRoot({
-      rootValue: {},
-      context: ({ req, res }) => ({ req, res }),
       debug: false,
+      tracing: false,
+      // cache: {}, // todo
+      // resolvers: {}, // todo
+      // schemaDirectives: {}, // todo
+      rootValue: {}, // todo
+      typePaths: [ 'src/**/typedefs/*.graphql' ],
+      context: ({ req, res }) => ({ req, res }),
       formatResponse: (res) => {
         try {
           const errors = res.errors;
@@ -33,9 +38,6 @@ import { WeatherModule } from './weather';
 
         return res;
       },
-      tracing: false,
-      // cache: {}, // todo
-      typePaths: [ 'src/**/typedefs/*.graphql' ],
     }),
     HttpModule.forRoot({
       timeout: 1000 * 5,

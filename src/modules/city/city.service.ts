@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, LessThan, MoreThan, FindManyOptions } from 'typeorm';
 
 import * as Joi from 'joi';
 import { JoiService } from 'providers';
+
+import { Connection, Pagination } from 'utils';
 
 import { City } from './interfaces/city.interface';
 import { CityEntity } from './entity/city.entity';
@@ -17,10 +19,51 @@ export class CityService {
   ) {
   }
 
-  public async findAll(q: string): Promise<City[]> {
-    const cities = await this.cityRepository.find();
+  public async findAll(q: string, pagination: Pagination): Promise<Connection<City>> {
+    const options: FindManyOptions = {};
 
-    return selCities(cities);
+    if (q) {
+      console.log('q', q);
+    }
+
+    if (pagination) {
+      if (pagination.last > 0) {
+        options.take = pagination.last;
+        options.order = {
+          id: 'DESC',
+        };
+
+        if (pagination.before) {
+          const id = Connection.atob(pagination.before);
+          // todo check id is uuid
+
+          options.where = {
+            codeId: LessThan(id),
+          };
+        }
+      } else if (pagination.first > 0) {
+        options.take = pagination.first;
+        options.order = {
+          id: 'ASC',
+        };
+
+        if (pagination.after) {
+          const id = Connection.atob(pagination.after);
+          // todo check id is uuid
+
+          options.where = {
+            codeId: MoreThan(id),
+          };
+        }
+      }
+    }
+
+    const total = await this.cityRepository.count({
+      where: options.where,
+    });
+    const cities = await this.cityRepository.find(options);
+
+    return new Connection<City>(selCities(cities), total, pagination);
   }
 
   public async findOneById(id: string): Promise<City> {

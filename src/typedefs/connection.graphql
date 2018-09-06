@@ -1,0 +1,13 @@
+input PaginationInput {
+  first: Int = 0
+  after: String = ""
+  last: Int = 0
+  before: String = ""
+}
+
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}

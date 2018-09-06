@@ -1,5 +1,7 @@
 import { Args, Query, Mutation, Resolver } from '@nestjs/graphql';
 
+import { Connection, Pagination } from 'utils';
+
 import { City } from './interfaces/city.interface';
 import { CityService } from './city.service';
 
@@ -8,9 +10,9 @@ export class CityResolvers {
   constructor(private readonly cityService: CityService) {
   }
 
-  @Query('cities')
-  public async findAll(@Args('q') q: string): Promise<City[]> {
-    return await this.cityService.findAll(q);
+  @Query('citiesConnection')
+  public async findAll(@Args('q') q: string, @Args('pagination') pagination: Pagination): Promise<Connection<City>> {
+    return await this.cityService.findAll(q, pagination);
   }
 
   @Query('city')

@@ -1,6 +1,17 @@
 type Query {
   city(id: String): City
-  cities(q: String = ""): [City]
+  citiesConnection(q: String = "", pagination: PaginationInput): CityConnection
+}
+
+type CityConnection {
+  total: Int
+  edges: [Edges!]!
+  pageInfo: PageInfo
+}
+
+type Edges {
+  node: City!
+  cursor: String!
 }
 
 type City {
