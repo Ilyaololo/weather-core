@@ -5,13 +5,13 @@ import { AxiosRequestConfig } from 'axios';
 @Global()
 @Module({})
 export class HttpModule {
-  public static forRoot(options: AxiosRequestConfig = {}): DynamicModule {
+  public static register(options: AxiosRequestConfig = {}): DynamicModule {
     const providers = AxiosModule.register(options);
 
     return {
       module: HttpModule,
-      imports: [ providers ],
-      exports: [ providers ],
+      imports: [providers],
+      exports: [providers],
     };
   }
 }

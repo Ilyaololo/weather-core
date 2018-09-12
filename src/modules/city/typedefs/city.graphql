@@ -5,11 +5,11 @@ type Query {
 
 type CityConnection {
   total: Int
-  edges: [Edges!]!
+  edges: [CityEdges!]!
   pageInfo: PageInfo
 }
 
-type Edges {
+type CityEdges {
   node: City!
   cursor: String!
 }

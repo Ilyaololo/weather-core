@@ -1,1 +1,1 @@
-export const AMQP = '@@app/providers/amqp';
+export const AMQP_TOKEN = '@@app/providers/amqp';

@@ -1,6 +1,6 @@
 {
   "exec": "ts-node -r tsconfig-paths/register src/app.ts",
-  "ext": "ts,graphql",
+  "ext": "ts, tsx, graphql",
   "ignore": ["src/**/*.spec.ts"],
   "watch": ["src"]
 }

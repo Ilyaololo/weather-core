@@ -1,1 +1,5 @@
+# Docker folder
+docker/
+
+# Dependency directories
 node_modules/

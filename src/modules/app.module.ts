@@ -2,14 +2,16 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { Module, MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import * as store from 'cache-manager-redis-store';
 import * as stringify from 'json-stringify-safe';
 
-import { AMQP, ELASTIC, SMS, SMTP } from 'configs';
-import { AmqpModule, ElasticModule, HttpModule, JoiModule, SmsModule, SmtpModule } from 'providers';
+import { AMQP, ELASTIC, REDIS, SMS, SMTP } from 'configs';
+import { AmqpModule, CacheModule, ElasticModule, HttpModule, JoiModule, SmsModule, SmtpModule } from 'providers';
 import { ToobusyMiddleware } from 'middleware';
 
 import { AuthModule } from './auth';
 import { CityModule } from './city';
+import { RoleModule } from './role';
 import { UserModule } from './user';
 import { WeatherModule } from './weather';
 
@@ -18,14 +20,20 @@ import { WeatherModule } from './weather';
     /**
      * System module
      */
+    CacheModule.register({
+      store,
+      ttl: 5,
+      host: REDIS.host,
+      port: REDIS.port,
+    }),
     GraphQLModule.forRoot({
       debug: false,
       tracing: false,
-      // cache: {}, // todo
-      // resolvers: {}, // todo
-      // schemaDirectives: {}, // todo
-      rootValue: {}, // todo
-      typePaths: [ 'src/**/typedefs/*.graphql' ],
+      // cache: {}, // TODO
+      // resolvers: {}, // TODO
+      // schemaDirectives: {}, // TODO
+      rootValue: {}, // TODO
+      typePaths: ['src/**/typedefs/*.graphql'],
       context: ({ req, res }) => ({ req, res }),
       formatResponse: (res) => {
         try {
@@ -39,7 +47,7 @@ import { WeatherModule } from './weather';
         return res;
       },
     }),
-    HttpModule.forRoot({
+    HttpModule.register({
       timeout: 1000 * 5,
       maxRedirects: 5,
     }),
@@ -48,20 +56,21 @@ import { WeatherModule } from './weather';
     /**
      * Common modules
      */
-    AmqpModule.forRoot(AMQP),
-    ElasticModule.forRoot(ELASTIC),
-    JoiModule.forRoot({
+    AmqpModule.register(AMQP),
+    ElasticModule.register(ELASTIC),
+    JoiModule.register({
       abortEarly: false,
       allowUnknown: true,
     }),
-    SmsModule.forRoot(SMS),
-    SmtpModule.forRoot(SMTP),
+    SmsModule.register(SMS),
+    SmtpModule.register(SMTP),
 
     /**
      * Application modules
      */
     AuthModule,
     CityModule,
+    RoleModule,
     UserModule,
     WeatherModule,
   ],

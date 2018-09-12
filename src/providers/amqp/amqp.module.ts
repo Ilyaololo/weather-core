@@ -2,13 +2,13 @@ import { DynamicModule, Global, Module } from '@nestjs/common';
 
 import { createConnection, ConnectionOptions } from 'amqp';
 
-import { AMQP } from './constants';
+import { AMQP_TOKEN } from './constants';
 import { AmqpService } from './amqp.service';
 
 @Global()
 @Module({})
 export class AmqpModule {
-  public static forRoot(options: ConnectionOptions = {}): DynamicModule {
+  public static register(options: ConnectionOptions = {}): DynamicModule {
     const connection = createConnection(options);
 
     return {
@@ -16,13 +16,13 @@ export class AmqpModule {
       providers: [
         AmqpService,
         {
-          provide: AMQP,
+          provide: AMQP_TOKEN,
           useFactory: () => {
             return connection;
           },
         },
       ],
-      exports: [ AmqpService ],
+      exports: [AmqpService],
     };
   }
 }

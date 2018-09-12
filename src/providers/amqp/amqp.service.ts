@@ -2,11 +2,11 @@ import { Inject } from '@nestjs/common';
 
 import { AMQPClient } from 'amqp';
 
-import { AMQP } from './constants';
+import { AMQP_TOKEN } from './constants';
 
 export class AmqpService {
   constructor(
-    @Inject(AMQP)
+    @Inject(AMQP_TOKEN)
     private readonly client: AMQPClient,
   ) {
   }

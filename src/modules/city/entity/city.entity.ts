@@ -7,9 +7,9 @@ export class CityEntity {
 
   @Column({
     type: 'uuid',
-    name: 'code_id',
+    unique: true,
   })
-  public codeId: string;
+  public sid: string;
 
   @Column({
     type: 'text',

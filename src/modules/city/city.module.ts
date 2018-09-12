@@ -6,9 +6,9 @@ import { CityResolvers } from './city.resolvers';
 import { CityService } from './city.service';
 
 @Module({
-  imports: [ TypeOrmModule.forFeature([ CityEntity ]) ],
-  providers: [ CityService, CityResolvers ],
-  exports: [ CityService ],
+  imports: [TypeOrmModule.forFeature([CityEntity])],
+  providers: [CityService, CityResolvers],
+  exports: [CityService],
 })
 export class CityModule {
 }

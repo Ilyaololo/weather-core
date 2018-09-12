@@ -1,6 +1,17 @@
 type Query {
   user(id: Int): User
-  users(q: String = ""): [User]
+  usersConnection(q: String = "", pagination: PaginationInput): UserConnection
+}
+
+type UserConnection {
+  total: Int
+  edges: [UserEdges!]!
+  pageInfo: PageInfo
+}
+
+type UserEdges {
+  node: User!
+  cursor: String!
 }
 
 type User {
@@ -9,4 +20,6 @@ type User {
   firstName: String
   lastName: String
   middleName: String
+  city: City
+  role: Role
 }

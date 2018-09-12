@@ -1,17 +1,7 @@
 import * as _memoize from 'lodash/memoize';
 
-import { City, CityEntity } from '../';
+import { City, CityEntity, CityModel } from '../';
 
-export const selCities: (list: CityEntity[]) => City[] = _memoize(
-  (list: CityEntity[]) => list.map<City>((city) => ({
-    id: city.codeId,
-    name: city.name,
-    region: city.region,
-    country: city.country,
-    timezone: city.timezone,
-    coord: {
-      lat: city.lat,
-      lon: city.lon,
-    },
-  })),
+export const selCity: (list: CityEntity[]) => City[] = _memoize(
+  (list: CityEntity[]) => list.map<City>((city) => new CityModel(city)),
 );

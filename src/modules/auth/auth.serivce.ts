@@ -18,9 +18,11 @@ export class AuthService {
   }
 
   public async createToken(args: JwtPayload): Promise<JwtToken> {
-    await this.joiService.validate(args, Joi.object({
-      login: Joi.string().max(128).required(),
-    }));
+    await this.joiService
+      .validate(args, Joi.object({
+        login: Joi.string().max(128).required(),
+      }))
+      .toPromise();
 
     return {
       token: this.jwtService.sign(args),
@@ -28,9 +30,11 @@ export class AuthService {
   }
 
   public async validateUser(payload: JwtPayload): Promise<UserEntity> {
-    await this.joiService.validate(payload, Joi.object({
-      login: Joi.string().max(128).required(),
-    }));
+    await this.joiService
+      .validate(payload, Joi.object({
+        login: Joi.string().max(128).required(),
+      }))
+      .toPromise();
 
     return await this.userService.findOneByLogin(payload);
   }

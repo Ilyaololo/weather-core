@@ -1,4 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+
+import { CityEntity as City } from 'modules/city';
+import { RoleEntity as Role } from 'modules/role';
 
 @Entity('user')
 export class UserEntity {
@@ -7,9 +10,9 @@ export class UserEntity {
 
   @Column({
     type: 'uuid',
-    name: 'code_id',
+    unique: true,
   })
-  public codeId: string;
+  public sid: string;
 
   @Column({
     type: 'text',
@@ -48,15 +51,31 @@ export class UserEntity {
   })
   public passwordHash: string;
 
+  @OneToOne<Role>((type) => Role)
+  @JoinColumn({
+    name: 'role_id',
+    referencedColumnName: 'sid',
+  })
+  public role: Role;
+
+  @OneToOne<City>((type) => City)
+  @JoinColumn({
+    name: 'city_id',
+    referencedColumnName: 'sid',
+  })
+  public city: City;
+
   @Column({
     type: 'timestamp with time zone',
     name: 'created_at',
+    default: 'now()',
   })
-  public createdAt: string;
+  public createdAt: number | string;
 
   @Column({
     type: 'timestamp with time zone',
     name: 'updated_at',
+    default: 'now()',
   })
-  public updatedAt: string;
+  public updatedAt: number | string;
 }

@@ -6,10 +6,8 @@ import * as toobusy from 'toobusy-js';
 export class ToobusyMiddleware implements NestMiddleware {
   public resolve(...args: any[]): MiddlewareFunction {
     return (req, res, next) => {
-      if (toobusy()) {
+      if (toobusy()) { // TODO
         // throw new ServiceUnavailableException();
-      } else {
-
       }
 
       next();

@@ -1,6 +1,6 @@
 import { Injectable, HttpService } from '@nestjs/common';
 
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import * as Joi from 'joi';
 import { JoiService } from 'providers';
@@ -17,7 +17,9 @@ export class WeatherService {
   }
 
   public async getWeatherByCityId(id: string): Promise<any> {
-    await this.joiService.validate(id, Joi.string().required());
+    await this.joiService
+      .validate(id, Joi.string().guid({ version: 'uuidv1' }).required())
+      .toPromise();
 
     const city = await this.cityService.findOneById(id);
 
@@ -29,7 +31,6 @@ export class WeatherService {
         },
       })
       .pipe(
-        tap(({ data }) => console.log(data)),
         map(({ data }) => ({
           cloud: data.current.cloud,
           condition: {

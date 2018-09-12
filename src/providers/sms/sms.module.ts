@@ -1,22 +1,22 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 
-import { SMS_OPTIONS } from './constants';
+import { SMS_OPTIONS_TOKEN } from './constants';
 import { SmsService } from './sms.service';
 
 @Global()
 @Module({})
 export class SmsModule {
-  public static forRoot(options: any = {}): DynamicModule {
+  public static register(options: any = {}): DynamicModule {
     return {
       module: SmsModule,
       providers: [
         SmsService,
         {
-          provide: SMS_OPTIONS,
+          provide: SMS_OPTIONS_TOKEN,
           useValue: options,
         },
       ],
-      exports: [ SmsService ],
+      exports: [SmsService],
     };
   }
 }

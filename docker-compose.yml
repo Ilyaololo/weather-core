@@ -28,7 +28,7 @@ services:
     environment:
       - "bootstrap.memory_lock=true"
       - "cluster.name=docker-cluster"
-      # - "path.repo=/usr/share/elasticsearch/repo" # todo
+      # - "path.repo=/usr/share/elasticsearch/repo" # TODO
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
@@ -38,7 +38,7 @@ services:
       - ${ELASTIC_PORT}:9200
     volumes:
       - esdata:/usr/share/elasticsearch/data
-      # - esrepo:/usr/share/elasticsearch/repo # todo
+      # - esrepo:/usr/share/elasticsearch/repo # TODO
     networks:
       - esnet
 
@@ -63,6 +63,8 @@ services:
     image: redis:4-alpine
     ports:
       - ${REDIS_PORT}:6379
+    volumes:
+      - redisdata:/data
 
   weather-backend:
     container_name: weather-backend
@@ -94,4 +96,7 @@ volumes:
   #   driver: local
 
   pgdata:
+    driver: local
+
+  redisdata:
     driver: local
