@@ -20,10 +20,13 @@ export class CityModel implements City {
 
   constructor(params: any) {
     this.country = params.country;
-    this.id = params.id;
+    this.id = params.sid;
     this.name = params.name;
     this.region = params.region;
     this.timezone = params.timezone;
-    this.coord = new CoordModel(params.coord);
+    this.coord = new CoordModel({
+      lat: params.lat,
+      lon: params.lon,
+    });
   }
 }

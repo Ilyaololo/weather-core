@@ -5,7 +5,7 @@ export class RoleModel  implements Role {
   public name: string;
 
   constructor(params: any) {
-    this.id = params.id;
+    this.id = params.sid;
     this.name = params.name;
   }
 }

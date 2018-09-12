@@ -14,7 +14,7 @@ export class UserModel implements User {
   constructor(params: any) {
     this.city = new CityModel(params.city);
     this.firstName = params.firstName;
-    this.id = params.id;
+    this.id = params.sid;
     this.lastName = params.lastName;
     this.login = params.login;
     this.middleName = params.middleName;
