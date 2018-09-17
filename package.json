@@ -9,15 +9,15 @@
   },
   "homepage": "https://gitlab.com/weather-widgets/core#readme",
   "scripts": {
-    "cache:clean": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm cache:clear",
+    "cache:clean": "ts-node -r tsconfig-paths/register -r dotenv/config ./node_modules/.bin/typeorm cache:clear",
     "dev": "better-npm-run dev",
     "docker": "docker-compose -f docker-compose.yml up -d --build --no-deps",
-    "migration:down": "yarn run cache:clean && ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:revert",
+    "migration:down": "yarn run cache:clean && ts-node -r tsconfig-paths/register -r dotenv/config ./node_modules/.bin/typeorm migration:revert",
     "migration:respawn": "yarn run migration:down && yarn run migration:up",
-    "migration:up": "yarn run cache:clean && ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:run",
-    "schema:drop": "yarn run cache:clean && ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm schema:drop",
+    "migration:up": "yarn run cache:clean && ts-node -r tsconfig-paths/register -r dotenv/config ./node_modules/.bin/typeorm migration:run",
+    "schema:drop": "yarn run cache:clean && ts-node -r tsconfig-paths/register -r dotenv/config ./node_modules/.bin/typeorm schema:drop",
     "schema:respawn": "yarn run schema:drop && yarn run schema:sync && yarn run migration:up",
-    "schema:sync": "yarn run cache:clean && ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm schema:sync",
+    "schema:sync": "yarn run cache:clean && ts-node -r tsconfig-paths/register -r dotenv/config ./node_modules/.bin/typeorm schema:sync",
     "start": "better-npm-run start",
     "start:debug": "better-npm-run start:debug"
   },
@@ -29,13 +29,13 @@
       }
     },
     "start": {
-      "command": "ts-node -r tsconfig-paths/register src/app.ts",
+      "command": "ts-node -r tsconfig-paths/register -r dotenv/config src/app.ts",
       "env": {
         "NODE_ENV": "development"
       }
     },
     "start:debug": {
-      "command": "node --inspect -r ts-node/register -r tsconfig-paths/register src/app.ts",
+      "command": "node --inspect -r ts-node/register -r tsconfig-paths/register -r dotenv/config src/app.ts",
       "env": {
         "NODE_ENV": "development"
       }
@@ -117,7 +117,7 @@
   "author": "i.lovenkov <ilyaololo96@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": "^8.12.0",
-    "yarn": "^1.9.4"
+    "node": "^8.11.4",
+    "yarn": "^1.6.0"
   }
 }

@@ -1,11 +1,10 @@
-FROM keymetrics/pm2:10-alpine
+FROM keymetrics/pm2:8-alpine
 
-COPY pm2.config.json .
+WORKDIR /data
 
-COPY package.json .
-COPY yarn.lock .
+COPY ./ ./
 
-RUN pm2 install pm2-logrotate
-RUN pm2 install pm2-server-monit
+RUN yarn install
+RUN pm2 install pm2-logrotate pm2-server-monit
 
 CMD ["pm2-runtime", "start", "pm2.config.json"]

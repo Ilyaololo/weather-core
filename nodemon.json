@@ -1,5 +1,5 @@
 {
-  "exec": "ts-node -r tsconfig-paths/register src/app.ts",
+  "exec": "ts-node -r tsconfig-paths/register -r dotenv/config src/app.ts",
   "ext": "ts, tsx, graphql",
   "ignore": ["src/**/*.spec.ts"],
   "watch": ["src"]

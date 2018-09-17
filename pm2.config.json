@@ -1,5 +1,8 @@
 {
-  "name": "api",
-  "script": "dist/main.js",
-  "env": {}
+  "name": "core",
+  "script": "./node_modules/.bin/ts-node",
+  "args": "-r tsconfig-paths/register -r dotenv/config src/app.ts",
+  "env": {
+    "NODE_ENV": "production"
+  }
 }

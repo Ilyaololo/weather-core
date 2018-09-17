@@ -36,6 +36,9 @@ async function bootstrap() {
      */
     app.use(compression());
 
+    /**
+     * Initialize microservices
+     */
     // app.connectMicroservice({
     //   transport: Transport.REDIS,
     //   options: {
